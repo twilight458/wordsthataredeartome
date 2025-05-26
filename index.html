@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>words that are dear to me - Save as JPG</title>
+<style>
+  body {
+    font-family: sans-serif;
+    margin: 2rem;
+    max-width: 600px;
+  }
+  #glyphs {
+    margin: 1rem 0;
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+  }
+  #glyphs .glyph {
+    margin-right: 0.5rem;
+  }
+  textarea {
+    width: 100%;
+    height: 150px;
+    font-family: sans-serif;
+    font-size: 1rem;
+  }
+  button {
+    margin-top: 1rem;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+  }
+  #poemContainer {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    white-space: pre-wrap;
+    font-family: serif;
+    font-size: 1rem;
+    background: rgb(179, 16, 255);
+  }
+</style>
+</head>
+<body>
+<img src="envlepoe.png" width="150px">
+<p></p>
+<b>words that are dear to me</b>
+<p>hey i created this little website while procrastinating uni work. </p>
+<p>theme switches daily, write as much or as little as you want and use the glyphs to make your text pretty
+    if you feel comfortable, save poem as jpg and send to @words on instagram. also if you have any themes you would like to add message that account
+</p>
+<div id="theme"></div>
+<p> click on glyphs to add</p>
+<div id="glyphs">
+  <span class="glyph">★</span>
+  <span class="glyph">☆</span>
+  <span class="glyph">♥</span>
+  <span class="glyph">♦</span>
+  <span class="glyph">✿</span>
+</div>
+
+<form id="poemForm">
+  <textarea id="poem" placeholder="Write your poem here..."></textarea>
+  <br />
+  <button type="button" id="saveImageBtn">Save as JPG</button>
+</form>
+
+<div id="savedMessage" style="color: green; margin-top: 1rem;"></div>
+
+<!-- html2canvas CDN -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script>
+  const themes = [
+    "the letter to home i could never send",
+    "memory loss",
+    "my future",
+    "night time",
+    "loneliness",
+     "complexities",
+    "if i could speak to a bird",
+    "mismatch"
+  ];
+
+  function getTodayTheme() {
+    const today = new Date();
+    const dayIndex = today.getDate() % themes.length;
+    return themes[dayIndex];
+  }
+
+  const themeDiv = document.getElementById("theme");
+  const poemTextarea = document.getElementById("poem");
+  const savedMessage = document.getElementById("savedMessage");
+  const poemForm = document.getElementById("poemForm");
+  const glyphsDiv = document.getElementById('glyphs');
+  const saveImageBtn = document.getElementById('saveImageBtn');
+
+  // Show today's theme
+  const todayTheme = getTodayTheme();
+  themeDiv.textContent = "today's theme: " + todayTheme;
+
+  // Load saved poem for today if any
+  const savedPoem = localStorage.getItem("poem_" + todayTheme);
+  if (savedPoem) {
+    poemTextarea.value = savedPoem;
+  }
+
+  poemForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const poem = poemTextarea.value.trim();
+    if (poem) {
+      localStorage.setItem("poem_" + todayTheme, poem);
+      savedMessage.textContent = "Poem saved!";
+      setTimeout(() => savedMessage.textContent = "", 3000);
+    }
+  });
+
+  glyphsDiv.addEventListener('click', (e) => {
+    if (e.target.classList.contains('glyph')) {
+      const glyph = e.target.textContent;
+      insertAtCursor(poemTextarea, glyph);
+      poemTextarea.focus();
+    }
+  });
+
+  function insertAtCursor(textarea, text) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const before = textarea.value.substring(0, start);
+    const after = textarea.value.substring(end);
+    textarea.value = before + text + after;
+    textarea.selectionStart = textarea.selectionEnd = start + text.length;
+  }
+
+  saveImageBtn.addEventListener('click', () => {
+    // Create a container div to render the theme and poem nicely
+    const container = document.createElement('div');
+    container.style.padding = "20px";
+    container.style.border = "1px solid black";
+    container.style.background = "white";
+    container.style.fontFamily = "serif";
+    container.style.fontSize = "18px";
+    container.style.whiteSpace = "pre-wrap";
+    container.style.width = "600px";
+
+    // Compose the content for image
+    container.innerHTML = `<strong>Theme: </strong>${todayTheme}<br><br>${poemTextarea.value}`;
+
+    document.body.appendChild(container);
+
+    html2canvas(container).then(canvas => {
+      // Create a link to download the image
+      const link = document.createElement('a');
+      link.download = `poem_${todayTheme.replace(/\s+/g, '_')}.jpg`;
+      link.href = canvas.toDataURL("image/jpeg", 1.0);
+      link.click();
+
+      document.body.removeChild(container);
+    });
+  });
+</script>
+
+</body>
+</html>

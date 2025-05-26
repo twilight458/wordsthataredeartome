@@ -1,0 +1,69 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #fdf6e3;
+  color: #333;
+}
+
+h1, h2 {
+  font-family: 'Georgia', serif; font-size: small;
+}
+
+input, textarea, button {
+  font-size: 0.5rem;
+}
+
+form {
+  margin-bottom: 1rem;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  padding: 0.5rem;
+  background: #fff;
+  border: 1px solid #ccc;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#poemList li {
+  background: #eee;
+  white-space: pre-wrap;
+  cursor: default;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: #ddd;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+li button {
+  background: #f44336;
+  color: white;
+  font-size: 0.8rem;
+  margin-left: 10px;
+}
+
